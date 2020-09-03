@@ -19,10 +19,10 @@
       <MyModal
         :posts="posts"
         :id="id"
-        :dataUser="dataUser"        
+        :dataUser="dataUser"
         :show-modal="showModal"
         v-if="showModal"
-        @close="showModal = false"
+        @close="CancelModal"
         :isEdit="isEdit"
       />
     </div>
@@ -47,21 +47,25 @@ export default {
       showModal: false,
       id: "",
       dataUser: {},
-      isEdit: false
+      isEdit: false,
     };
   },
   methods: {
+    CancelModal(data) {
+      this.dataUser = data;
+      this.showModal = false;
+    },
     editUser(id) {
       this.isEdit = true;
       this.posts.forEach((el) => {
-        if (el.id === id) {              
+        if (el.id === id) {
           this.dataUser.id = el.id;
-          this.dataUser.name = el.name.split(' ')[0];
-          this.dataUser.surname = el.name.split(' ')[1];
-          this.dataUser.email=el.email;
+          this.dataUser.name = el.name.split(" ")[0];
+          this.dataUser.surname = el.name.split(" ")[1];
+          this.dataUser.email = el.email;
         }
       });
-      this.showModal = true;           
+      this.showModal = true;
     },
     deleteUser(id, name) {
       const apiUrl = `https://gorest.co.in/public-api/users/${id}`;

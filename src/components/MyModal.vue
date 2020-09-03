@@ -4,7 +4,7 @@
       <div class="modal-mask">
         <div class="modal-wrapper">
           <div class="modal-container">
-            <a href="#" class="close" @click="$emit('close', dataEditUser)">×</a>
+            <a href="#" class="close" @click="CancelModal">×</a>
             <div class="modal-header">
               <slot name="header">
                 <h3>Card user</h3>
@@ -61,7 +61,7 @@
                   <hr />
                   <div class="form-buttons">
                     <button type="submit" class="modal-button border-color-save">Save</button>
-                    <button class="modal-button border-color-cancel" @click="$emit('close', dataEditUser)">Cancel</button>
+                    <button class="modal-button border-color-cancel" @click="CancelModal">Cancel</button>
                   </div>
                 </form>
               </slot>
@@ -81,13 +81,12 @@ export default {
     return {
       errors: [],
       dataEditUser: { ...this.dataUser },
-      dataUsers: { ...this.posts },
+      dataUsers: { ...[this.posts] },
     };
   },
   methods: {
-    close() {      
-      this.cleanFieldsModal();
-      console.log(this.dataEditUser);
+    CancelModal() {  
+      this.cleanFieldsModal();          
       this.$emit("close", this.dataEditUser);
     },
 
@@ -198,7 +197,7 @@ export default {
             `User ${goodResponce.data.name} (id=${goodResponce.data.id}) was corrected successfully.`
           );
           this.$emit("close", true);
-          this.updateUserModal(id);
+          this.updateUserModal(goodResponce.data.id, data);
           this.cleanFieldsModal();
         } else {
           let errorResponse = await res.json();
@@ -210,11 +209,12 @@ export default {
     addUserModal(id, data) {
       console.log(id, data);
     },
-    updateUserModal(id) {
-      console.log(id, this.dataUsers);
+    updateUserModal(id, data) {
+      console.log(id, data);
+      console.log(this.dataUsers);
       //const index = this.dataUsers.findIndex((e) => id === e.id);
       //this.dataUsers.splice(index, 1);
-      //this.dataUsers.push(this.dataEditUser);
+      //this.dataUsers.push(data);
     },
   },
 };
