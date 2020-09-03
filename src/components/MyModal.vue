@@ -4,10 +4,10 @@
       <div class="modal-mask">
         <div class="modal-wrapper">
           <div class="modal-container">
-            <a href="#" class="close" @click="$emit('close')">×</a>
+            <a href="#" class="close" @click="$emit('close', dataEditUser)">×</a>
             <div class="modal-header">
               <slot name="header">
-                <h3>Add new User or updae</h3>
+                <h3>Card user</h3>
               </slot>
             </div>
             <div class="modal-body">
@@ -61,7 +61,7 @@
                   <hr />
                   <div class="form-buttons">
                     <button type="submit" class="modal-button border-color-save">Save</button>
-                    <button class="modal-button border-color-cancel" @click="$emit('close')">Cancel</button>
+                    <button class="modal-button border-color-cancel" @click="$emit('close', dataEditUser)">Cancel</button>
                   </div>
                 </form>
               </slot>
@@ -85,15 +85,20 @@ export default {
     };
   },
   methods: {
+    close() {      
+      this.cleanFieldsModal();
+      console.log(this.dataEditUser);
+      this.$emit("close", this.dataEditUser);
+    },
+
     cleanFieldsModal() {
       //console.log(this.dataEditUser);
-       this.dataEditUser.id = "";
-       this.dataEditUser.name = "";
-       this.dataEditUser.surname = "";
-       this.dataEditUser.date = "";
-       this.dataEditUser.phone = "";
-       this.dataEditUser.email = "";  
-       //this.$emit("close-modal", this.dataEditUser);     
+      this.dataEditUser.id = "";
+      this.dataEditUser.name = "";
+      this.dataEditUser.surname = "";
+      this.dataEditUser.date = "";
+      this.dataEditUser.phone = "";
+      this.dataEditUser.email = "";      
     },
     checkForm(e) {
       e.preventDefault();

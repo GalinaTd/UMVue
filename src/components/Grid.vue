@@ -123,14 +123,5 @@ button.delete-user {
   float: left;
   border-radius: 5px;
 }
-a {
-  font-weight: bold;
-  text-decoration: none;
 
-  &.active {
-    font-weight: bold;
-    color: black;
-    text-decoration: underline;
-  }
-}
 </style>
