@@ -11,7 +11,7 @@
         :pages="pages"
         :isEdit="isEdit"
         @edit-user="editUser"
-        @delete-user="deleteUser"
+        @delete-user="deleteUser"        
       />
     </div>
     <div>
@@ -24,6 +24,7 @@
         v-if="showModal"
         @close="CancelModal"
         :isEdit="isEdit"
+        :addUserModal="addUserModal"
       />
     </div>
   </div>
@@ -43,9 +44,9 @@ export default {
       posts: [],
       page: 1,
       perPage: 9,
-      pages: [],
+      pages: null,
       showModal: false,
-      id: "",
+      id: null,
       dataUser: {},
       isEdit: false,
     };
@@ -53,6 +54,10 @@ export default {
   methods: {
     CancelModal(data) {
       this.dataUser = data;
+      this.showModal = false;
+    },
+    addUserModal(id) {
+     console.log(id);          
       this.showModal = false;
     },
     editUser(id) {
@@ -93,7 +98,7 @@ export default {
     },
   },
   mounted() {
-    fetch("https://gorest.co.in/public-api/users")
+    fetch(`https://gorest.co.in/public-api/users/?page=${this.page}`)
       .then((response) => response.json())
       .then((json) => {
         let temp = [];
@@ -103,8 +108,8 @@ export default {
           }
         });
         this.posts = temp;
-        //this.posts = json;
-        //https://gorest.co.in/public-api/users?page=2
+        this.pages = json.meta.pagination.pages;
+        this.page = json.meta.pagination.page;
       });
   },
 };

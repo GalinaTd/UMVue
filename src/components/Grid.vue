@@ -32,22 +32,22 @@
         </tr>
       </tbody>
     </table>
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation">
       <ul class="pagination">
         <li class="page-item">
-          <button type="button" class="page-link" v-if="page !== 1" @click="page--">Previous</button>
+          <button type="button" class="page-link">Previous</button>
         </li>
         <li class="page-item">
-          <button
+          <!-- <button
             type="button"
             class="page-link"
             v-for="pageNumber in pages.slice(page-1, page+5)"
             :key="pageNumber"
             @click="page = pageNumber"
-          >{{pageNumber}}</button>
+          >{{pageNumber}}</button>-->
         </li>
         <li class="page-item">
-          <button type="button" @click="page++" v-if="page < pages.length" class="page-link">Next</button>
+          <button type="button" class="page-link">Next</button>
         </li>
       </ul>
     </nav>
@@ -58,33 +58,21 @@
 export default {
   name: "Grid",
   props: ["posts", "page", "perPage", "pages", "isEdit"],
+  data() {
+    return {
+      curPage: null,
+    }
+  },
   methods: {
-    editUser(id) {     
-      this.$emit("edit-user", (id, this.isEditHadler));                      
+    editUser(id) {
+      this.$emit("edit-user", (id, this.isEditHadler));
     },
 
     deleteUser(id, name) {
       this.$emit("delete-user", id, name);
-    },
-    setPages() {
-      let numberOfPages = Math.ceil(this.posts.data.length / this.perPage);
-      for (let index = 1; index <= numberOfPages; index++) {
-        this.pages.push(index);
-      }
-    },
-    paginate(posts) {
-      let page = this.page;
-      let perPage = this.perPage;
-      let from = page * perPage - perPage;
-      let to = page * perPage;
-      return posts.data.slice(from, to);
-    },
+    },    
   },
-  computed: {
-    displayedPosts() {
-      return this.posts.paginate(this.posts.data);
-    },
-  },
+  
 };
 </script>
 
@@ -123,5 +111,4 @@ button.delete-user {
   float: left;
   border-radius: 5px;
 }
-
 </style>

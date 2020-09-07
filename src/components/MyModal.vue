@@ -76,12 +76,11 @@
 <script>
 export default {
   name: "MyModal",
-  props: ["showModal", "id", "dataUser", "isEdit", "posts"],
+  props: ["showModal", "id", "dataUser", "isEdit"],
   data() {
     return {
       errors: [],
-      dataEditUser: { ...this.dataUser },
-      dataUsers: { ...[this.posts] },
+      dataEditUser: { ...this.dataUser },      
     };
   },
   methods: {
@@ -89,7 +88,6 @@ export default {
       this.cleanFieldsModal();          
       this.$emit("close", this.dataEditUser);
     },
-
     cleanFieldsModal() {
       //console.log(this.dataEditUser);
       this.dataEditUser.id = "";
@@ -163,8 +161,8 @@ export default {
           alert(
             `User ${goodResponce.data.name} (id=${goodResponce.data.id}) was create successfully.`
           );
-          this.$emit("close", true);
-          this.addUserModal(goodResponce.data.id, data);
+          //this.$emit("close", true);         
+          this.addUserModal(goodResponce.data.id);
         } else {
           let errorResponse = await res.json();
           this.errors.push(errorResponse.error);
@@ -197,7 +195,7 @@ export default {
             `User ${goodResponce.data.name} (id=${goodResponce.data.id}) was corrected successfully.`
           );
           this.$emit("close", true);
-          this.updateUserModal(goodResponce.data.id, data);
+          //this.updateUserModal(goodResponce.data.id, data);
           this.cleanFieldsModal();
         } else {
           let errorResponse = await res.json();
@@ -206,16 +204,11 @@ export default {
         }
       });
     },
-    addUserModal(id, data) {
-      console.log(id, data);
-    },
-    updateUserModal(id, data) {
-      console.log(id, data);
-      console.log(this.dataUsers);
-      //const index = this.dataUsers.findIndex((e) => id === e.id);
-      //this.dataUsers.splice(index, 1);
-      //this.dataUsers.push(data);
-    },
+     addUserModal(id) {
+       console.log(id);
+       this.$emit("close", id);              
+     },
+    
   },
 };
 </script>
