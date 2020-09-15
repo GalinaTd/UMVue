@@ -163,8 +163,8 @@ export default {
           alert(
             `User ${goodResponce.data.name} (id=${goodResponce.data.id}) was create successfully.`
           );
-          this.$emit("close", true);
-          this.addUserModal(goodResponce.data.id, data);
+          this.addUserModal(goodResponce.data);
+          this.$emit("close", true);          
         } else {
           let errorResponse = await res.json();
           this.errors.push(errorResponse.error);
@@ -197,7 +197,7 @@ export default {
             `User ${goodResponce.data.name} (id=${goodResponce.data.id}) was corrected successfully.`
           );
           this.$emit("close", true);
-          this.updateUserModal(goodResponce.data.id, data);
+          this.updateUserModal(goodResponce.data);
           this.cleanFieldsModal();
         } else {
           let errorResponse = await res.json();
@@ -206,15 +206,11 @@ export default {
         }
       });
     },
-    addUserModal(id, data) {
-      console.log(id, data);
+    addUserModal(data) {     
+      this.$emit("add-user", data);
     },
-    updateUserModal(id, data) {
-      console.log(id, data);
-      console.log(this.dataUsers);
-      //const index = this.dataUsers.findIndex((e) => id === e.id);
-      //this.dataUsers.splice(index, 1);
-      //this.dataUsers.push(data);
+    updateUserModal(data) {
+      this.$emit("update-user", data);     
     },
   },
 };
