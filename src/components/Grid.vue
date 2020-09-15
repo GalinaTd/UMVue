@@ -1,7 +1,5 @@
 <template>
-  <div class="offset">
-    <input type="text" class="form-control" />
-
+  <div class="offset">    
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -31,48 +29,24 @@
           </td>
         </tr>
       </tbody>
-    </table>
-    <nav aria-label="Page navigation">
-      <ul class="pagination">
-        <li class="page-item">
-          <button type="button" class="page-link">Previous</button>
-        </li>
-        <li class="page-item">
-          <!-- <button
-            type="button"
-            class="page-link"
-            v-for="pageNumber in pages.slice(page-1, page+5)"
-            :key="pageNumber"
-            @click="page = pageNumber"
-          >{{pageNumber}}</button>-->
-        </li>
-        <li class="page-item">
-          <button type="button" class="page-link">Next</button>
-        </li>
-      </ul>
-    </nav>
+    </table>    
   </div>
 </template>
 
 <script>
 export default {
   name: "Grid",
-  props: ["posts", "page", "perPage", "pages", "isEdit"],
-  data() {
-    return {
-      curPage: null,
-    }
-  },
+  props: ["posts", "isEdit"],
   methods: {
-    editUser(id) {
-      this.$emit("edit-user", (id, this.isEditHadler));
+    editUser(id) {     
+      this.$emit("edit-user", (id));                      
     },
 
     deleteUser(id, name) {
       this.$emit("delete-user", id, name);
-    },    
-  },
-  
+    },
+    
+  },  
 };
 </script>
 
@@ -111,4 +85,5 @@ button.delete-user {
   float: left;
   border-radius: 5px;
 }
+
 </style>

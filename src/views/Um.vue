@@ -3,6 +3,7 @@
     <h2>User management</h2>
     <router-link to="/">Home</router-link>
     <hr />
+    <input type="text" class="input-search" placeholder="Search" />
     <div class="my-grid">
       <Grid
         :posts="posts"
@@ -11,11 +12,11 @@
         :pages="pages"
         :isEdit="isEdit"
         @edit-user="editUser"
-        @delete-user="deleteUser"        
+        @delete-user="deleteUser"
       />
     </div>
     <div>
-      <button id="show-modal" @click="showModal = true">Add new User</button>
+      <button class="button-ctrl" id="show-modal" @click="showModal = true">Add new User</button>
       <MyModal
         :posts="posts"
         :id="id"
@@ -24,8 +25,16 @@
         v-if="showModal"
         @close="CancelModal"
         :isEdit="isEdit"
-        :addUserModal="addUserModal"
+        @add-user="addUserModal"
+        @update-user="updateUserModal"
       />
+    </div>
+    <div class="pagination" @click="onChangePage" :page="page" :pages="pages">
+      <button id="first" :disabled="page === 1" class="button-page" type="button">First</button>
+      <button id="prev" :disabled="page === 1" class="button-page" type="button">Prev</button>
+      <span>{{page}}/{{pages}}</span>
+      <button id="next" :disabled="page === pages" class="button-page" type="button">Next</button>
+      <button id="last" :disabled="page === pages" class="button-page" type="button">Last</button>
     </div>
   </div>
 </template>
@@ -46,19 +55,42 @@ export default {
       perPage: 9,
       pages: null,
       showModal: false,
-      id: null,
+      id: "",
       dataUser: {},
       isEdit: false,
     };
   },
   methods: {
+    onChangePage() {
+      switch (event.target.id) {
+        case "first":
+          this.page = 1;
+          break;
+        case "prev":
+          this.page--;
+          break;
+        case "next":
+          this.page++;
+          break;
+        case "last":
+          this.page = this.pages;
+          break;
+        default:
+          alert("No such values");
+      }
+      this.loadDataFromApi(this.page);
+      //console.log(this.page);
+    },
     CancelModal(data) {
       this.dataUser = data;
       this.showModal = false;
     },
-    addUserModal(id) {
-     console.log(id);          
-      this.showModal = false;
+    addUserModal(data) {     
+      this.posts.push(data);
+    },
+    updateUserModal(data) {
+      let index = this.posts.findIndex((e) => data.id === e.id);
+      this.posts.splice(index, 1, data);
     },
     editUser(id) {
       this.isEdit = true;
@@ -96,21 +128,25 @@ export default {
         }
       });
     },
+    loadDataFromApi(curPage) {
+      fetch(`https://gorest.co.in/public-api/users?page=${curPage}`)
+        .then((response) => response.json())
+        .then((json) => {
+          let temp = [];
+          json.data.forEach(function (el) {
+            if (temp.length < 10) {
+              temp.push(el);
+            }
+          });
+          this.posts = temp;
+          this.page = json.meta.pagination.page;
+          this.pages = json.meta.pagination.pages;
+          //https://gorest.co.in/public-api/users?page=2
+        });
+    },
   },
   mounted() {
-    fetch(`https://gorest.co.in/public-api/users/?page=${this.page}`)
-      .then((response) => response.json())
-      .then((json) => {
-        let temp = [];
-        json.data.forEach(function (el) {
-          if (temp.length < 10) {
-            temp.push(el);
-          }
-        });
-        this.posts = temp;
-        this.pages = json.meta.pagination.pages;
-        this.page = json.meta.pagination.page;
-      });
+    this.loadDataFromApi(this.page);
   },
 };
 </script>
@@ -125,6 +161,25 @@ export default {
   margin-top: 60px;
 }
 .input-search {
-  width: 500px;
+  width: 1000px;
+}
+.button-ctrl {
+  background-color: SteelBlue;
+  color: white;
+
+}
+.pagination {
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.button-page {
+  border-color: lightgrey;
+  border-width: 1px;
+  margin: 0 5px;
+  width: 60px;
+}
+span {
+  margin: 0 5px;
 }
 </style>
