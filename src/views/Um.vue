@@ -3,7 +3,7 @@
     <h2>User management</h2>
     <router-link to="/">Home</router-link>
     <hr />
-    <input type="text" class="input-search" placeholder="Search" />
+    <input type="text" class="input-search" @change="handlerSearch"/>
     <div class="my-grid">
       <Grid
         :posts="posts"
@@ -61,6 +61,12 @@ export default {
     };
   },
   methods: {
+    handlerSearch() {
+      this.posts.find((el) => {        
+         let temp = el.name.toLowerCase().includes(event.target.value.toLowerCase());
+         console.log(temp);
+      })   
+    },
     onChangePage() {
       switch (event.target.id) {
         case "first":

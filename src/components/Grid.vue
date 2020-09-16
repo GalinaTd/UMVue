@@ -1,12 +1,15 @@
 <template>
-  <div class="offset">    
+  <div class="offset">
     <table class="table table-bordered">
       <thead>
         <tr>
           <th>Action</th>
-          <th>Name</th>
+          <!-- <th>Name</th>
           <th>Surname</th>
-          <th>Email</th>
+          <th>Email</th>-->
+          <th v-for="(column, index) in columns" :key="index">
+            <a href="#" @click="sortBy(column)">{{ column }}</a>
+          </th>
           <th>Create/update date</th>
         </tr>
       </thead>
@@ -29,7 +32,7 @@
           </td>
         </tr>
       </tbody>
-    </table>    
+    </table>
   </div>
 </template>
 
@@ -37,16 +40,36 @@
 export default {
   name: "Grid",
   props: ["posts", "isEdit"],
+  data() {
+    return {
+      search: "",
+      columns: ["name", "surname", "email"],
+    };
+  },
   methods: {
-    editUser(id) {     
-      this.$emit("edit-user", (id));                      
+    editUser(id) {
+      this.$emit("edit-user", id);
     },
 
     deleteUser(id, name) {
       this.$emit("delete-user", id, name);
     },
-    
-  },  
+    sortBy(sortKey) {
+      if (sortKey === "surname") {
+        this.posts.sort((a, b) => {
+          let val1 = a.name.substring(a.name.indexOf(" ") + 1);
+          let val2 = b.name.substring(b.name.indexOf(" ") + 1);
+          if (val1 > val2) {
+            return 1
+          } else {
+            return -1
+          }
+        });
+      } else {
+        this.posts.sort((a, b) => (a[sortKey] > b[sortKey] ? 1 : -1));
+      }
+    },
+  },
 };
 </script>
 
@@ -85,5 +108,14 @@ button.delete-user {
   float: left;
   border-radius: 5px;
 }
-
+a {
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: capitalize;
+}
+.active {
+  font-weight: bold;
+  color: black;
+  text-decoration: underline;
+}
 </style>
