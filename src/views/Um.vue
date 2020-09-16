@@ -140,8 +140,7 @@ export default {
           });
           this.posts = temp;
           this.page = json.meta.pagination.page;
-          this.pages = json.meta.pagination.pages;
-          //https://gorest.co.in/public-api/users?page=2
+          this.pages = json.meta.pagination.pages;          
         });
     },
   },
