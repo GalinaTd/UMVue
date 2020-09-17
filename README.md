@@ -1,2 +1,2 @@
 # UMVue
-My project for user managent on on the framework Vue js
+My project for user managent on the framework Vue js
