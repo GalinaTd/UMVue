@@ -3,7 +3,7 @@
     <h2>User management</h2>
     <router-link to="/">Home</router-link>
     <hr />
-    <input type="text" class="input-search" @change="handlerSearch"/>
+    <input type="text" class="input-search" @keypress.enter="handlerSearch" placeholder="Search"/>
     <div class="my-grid">
       <Grid
         :posts="posts"
@@ -62,10 +62,14 @@ export default {
   },
   methods: {
     handlerSearch() {
-      this.posts.find((el) => {        
-         let temp = el.name.toLowerCase().includes(event.target.value.toLowerCase());
-         console.log(temp);
-      })   
+      if (event.target.value.length > 0) {
+        this.posts = this.posts.filter((el) =>
+          el.name.toLowerCase().includes(event.target.value.toLowerCase())          
+        );
+        event.target.value = "";
+      } else {
+        this.loadDataFromApi(this.page);        
+      }
     },
     onChangePage() {
       switch (event.target.id) {
@@ -84,24 +88,26 @@ export default {
         default:
           alert("No such values");
       }
-      this.loadDataFromApi(this.page);
-      //console.log(this.page);
+      this.loadDataFromApi(this.page);      
     },
-    CancelModal(data) {
-      this.dataUser = data;
+    CancelModal() {      
+      this.dataUser = {};
       this.showModal = false;
+      this.isEdit = false;
     },
-    addUserModal(data) {     
+    addUserModal(data) { 
+      //console.log(data);  
       this.posts.push(data);
+      this.isEdit = false;
     },
     updateUserModal(data) {
       let index = this.posts.findIndex((e) => data.id === e.id);
       this.posts.splice(index, 1, data);
     },
-    editUser(id) {
+    editUser(id) {     
       this.isEdit = true;
       this.posts.forEach((el) => {
-        if (el.id === id) {
+        if (el.id === id) {           
           this.dataUser.id = el.id;
           this.dataUser.name = el.name.split(" ")[0];
           this.dataUser.surname = el.name.split(" ")[1];
@@ -146,7 +152,7 @@ export default {
           });
           this.posts = temp;
           this.page = json.meta.pagination.page;
-          this.pages = json.meta.pagination.pages;          
+          this.pages = json.meta.pagination.pages;
         });
     },
   },
@@ -171,7 +177,6 @@ export default {
 .button-ctrl {
   background-color: SteelBlue;
   color: white;
-
 }
 .pagination {
   justify-content: center;

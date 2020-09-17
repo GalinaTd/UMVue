@@ -47,7 +47,7 @@ export default {
     };
   },
   methods: {
-    editUser(id) {
+    editUser(id) {     
       this.$emit("edit-user", id);
     },
 

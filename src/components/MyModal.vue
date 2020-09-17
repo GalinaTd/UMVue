@@ -86,8 +86,8 @@ export default {
   },
   methods: {
     CancelModal() {  
-      this.cleanFieldsModal();          
-      this.$emit("close", this.dataEditUser);
+      this.cleanFieldsModal();                
+      this.$emit("close", true);//this.dataEditUser
     },
 
     cleanFieldsModal() {
@@ -108,8 +108,9 @@ export default {
         this.dataEditUser.surname = e.target.surname.value;
         this.dataEditUser.date = e.target.date.value;
         this.dataEditUser.phone = e.target.phone.value;
-        this.dataEditUser.email = e.target.email.value;
+        this.dataEditUser.email = e.target.email.value;       
       }
+        
       //check
       if (!this.dataEditUser.name) this.errors.push("Name required.");
       if (!this.dataEditUser.surname) this.errors.push("Surname required.");
@@ -164,7 +165,7 @@ export default {
             `User ${goodResponce.data.name} (id=${goodResponce.data.id}) was create successfully.`
           );
           this.addUserModal(goodResponce.data);
-          this.$emit("close", true);          
+          this.CancelModal();                    
         } else {
           let errorResponse = await res.json();
           this.errors.push(errorResponse.error);
@@ -196,9 +197,11 @@ export default {
           alert(
             `User ${goodResponce.data.name} (id=${goodResponce.data.id}) was corrected successfully.`
           );
-          this.$emit("close", true);
+          //this.$emit("close", true);
           this.updateUserModal(goodResponce.data);
-          this.cleanFieldsModal();
+          this.CancelModal();
+          //this.cleanFieldsModal();          
+          //this.isEdit = false;
         } else {
           let errorResponse = await res.json();
           this.errors.push(errorResponse.error);
