@@ -7,8 +7,7 @@
     <div class="my-grid">
       <Grid
         :posts="posts"
-        :page="page"
-        :perPage="perPage"
+        :page="page"        
         :pages="pages"
         :isEdit="isEdit"
         @edit-user="editUser"
@@ -51,8 +50,7 @@ export default {
   data() {
     return {
       posts: [],
-      page: 1,
-      perPage: 9,
+      page: 1,      
       pages: null,
       showModal: false,
       id: "",
@@ -95,14 +93,14 @@ export default {
       this.showModal = false;
       this.isEdit = false;
     },
-    addUserModal(data) { 
-      //console.log(data);  
+    addUserModal(data) {      
       this.posts.push(data);
       this.isEdit = false;
     },
     updateUserModal(data) {
       let index = this.posts.findIndex((e) => data.id === e.id);
       this.posts.splice(index, 1, data);
+      this.isEdit = false;
     },
     editUser(id) {     
       this.isEdit = true;
