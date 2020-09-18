@@ -85,9 +85,9 @@ export default {
     };
   },
   methods: {
-    CancelModal() {  
-      this.cleanFieldsModal();                
-      this.$emit("close", true);//this.dataEditUser
+    CancelModal() {
+      this.cleanFieldsModal();
+      this.$emit("close", true); //this.dataEditUser
     },
 
     cleanFieldsModal() {
@@ -97,7 +97,7 @@ export default {
       this.dataEditUser.surname = "";
       this.dataEditUser.date = "";
       this.dataEditUser.phone = "";
-      this.dataEditUser.email = "";      
+      this.dataEditUser.email = "";
     },
     checkForm(e) {
       e.preventDefault();
@@ -108,14 +108,19 @@ export default {
         this.dataEditUser.surname = e.target.surname.value;
         this.dataEditUser.date = e.target.date.value;
         this.dataEditUser.phone = e.target.phone.value;
-        this.dataEditUser.email = e.target.email.value;       
+        this.dataEditUser.email = e.target.email.value;
       }
-        
+
       //check
       if (!this.dataEditUser.name) this.errors.push("Name required.");
       if (!this.dataEditUser.surname) this.errors.push("Surname required.");
       if (!this.dataEditUser.date)
         this.errors.push("Date of birthday required.");
+      if (!this.dataEditUser.phone) {
+        this.errors.push("Phone required.");
+      } else if (!this.validPhone(this.dataEditUser.phone)) {
+        this.errors.push("Valid phone required.");
+      }
       if (!this.dataEditUser.email) {
         this.errors.push("Email required.");
       } else if (!this.validEmail(this.dataEditUser.email)) {
@@ -142,9 +147,15 @@ export default {
     },
     validEmail(email) {
       /* eslint-disable */
-      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       /* eslint-enable */
       return re.test(email);
+    },
+    validPhone(phone) {
+       /* eslint-disable */
+      let re = /^\d[\d\(\)\ -]{4,14}\d$/;
+      return re.test(phone);
+       /* eslint-enable */
     },
     async addNewUserApi(data) {
       const apiUrl = "https://gorest.co.in/public-api/users";
@@ -165,7 +176,7 @@ export default {
             `User ${goodResponce.data.name} (id=${goodResponce.data.id}) was create successfully.`
           );
           this.addUserModal(goodResponce.data);
-          this.CancelModal();                    
+          this.CancelModal();
         } else {
           let errorResponse = await res.json();
           this.errors.push(errorResponse.error);
@@ -200,7 +211,7 @@ export default {
           //this.$emit("close", true);
           this.updateUserModal(goodResponce.data);
           this.CancelModal();
-          //this.cleanFieldsModal();          
+          //this.cleanFieldsModal();
           //this.isEdit = false;
         } else {
           let errorResponse = await res.json();
@@ -209,11 +220,11 @@ export default {
         }
       });
     },
-    addUserModal(data) {     
+    addUserModal(data) {
       this.$emit("add-user", data);
     },
     updateUserModal(data) {
-      this.$emit("update-user", data);     
+      this.$emit("update-user", data);
     },
   },
 };
