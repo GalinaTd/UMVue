@@ -1,4 +1,4 @@
-# vue-um
+# Simple application for user management (Create, Read, Update, Delete) on the framework Vue js.
 
 ## Project setup
 ```
